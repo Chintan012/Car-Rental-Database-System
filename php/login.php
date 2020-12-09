@@ -26,6 +26,9 @@
   	<p>
   		Not yet a member? <a href="registration.php">Sign up</a>
   	</p>
+	<p>
+  		Agency coordinator? <a href="admin.php">Admin Login</a>
+  	</p>
   </form>
 </body>
 </html>

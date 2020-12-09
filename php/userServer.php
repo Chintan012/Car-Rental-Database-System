@@ -84,5 +84,31 @@ if (isset($_POST['login_user'])) {
         }
     }
   }
+
+
+  // ADMIN 
+  if (isset($_POST['login_admin'])) {
+    $email = mysqli_real_escape_string($db, $_POST['email']);
+    $password = mysqli_real_escape_string($db, $_POST['password']);
+  
+    if (empty($email)) {
+        array_push($errors, "admin email is required");
+    }
+    if (empty($password)) {
+        array_push($errors, "admin password is required");
+    }
+  
+    if (count($errors) == 0) {
+        $query = "SELECT * FROM admin WHERE email='$email' AND password='$password'";
+        $results = mysqli_query($db, $query);
+        if (mysqli_num_rows($results) == 1) {
+          $_SESSION['email'] = $email;
+          $_SESSION['success'] = "You are now logged in";
+          header('location: carWarehouse.php');
+        }else {
+            array_push($errors, "Wrong email/password combination");
+        }
+    }
+  }
   
   ?>
