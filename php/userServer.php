@@ -8,6 +8,13 @@ $email    = "";
 $phoneNumber = "";
 $state = "";
 $city = "";
+$carName = "";
+$carPhotoURL = "";
+$carInfo = "";
+$carStock = "";
+$carRate = "";
+
+
 $errors = array(); 
 
 // connect to the database
@@ -58,6 +65,42 @@ if (isset($_POST['reg_user'])) {
   }
 }
 
+if (isset($_POST['car_add'])) {
+  // receive all input values from the form
+  $carName = mysqli_real_escape_string($db, $_POST['carName']);
+  $carPhotoURL = mysqli_real_escape_string($db, $_POST['carPhotoURL']);
+  $carInfo = mysqli_real_escape_string($db, $_POST['carInfo']);
+  $carStock = mysqli_real_escape_string($db, $_POST['carStock']);
+  $carRate = mysqli_real_escape_string($db, $_POST['carRate']);
+
+  // form validation: ensure that the form is correctly filled ...
+  // by adding (array_push()) corresponding error unto $errors array
+  if (empty($carName)) { array_push($errors, "Car Name is required"); }
+  if (empty($carRate)) { array_push($errors, "Car Rate is required"); }
+
+  // first check the database to make sure 
+  // a user does not already exist with the same email
+  $user_check_query = "SELECT * FROM cars WHERE car_name='$carName' LIMIT 1";
+  $result = mysqli_query($db, $user_check_query);
+  $car = mysqli_fetch_assoc($result);
+  
+  if ($car) { // if user exists
+    if ($car['car_name'] === $carName) {
+      array_push($errors, "car name already exists");
+    }
+  }
+
+  // Finally, register user if there are no errors in the form
+  if (count($errors) == 0) {
+  //encrypt the password before saving in the database
+
+  	$query = "INSERT INTO cars (car_name, car_pic, car_info, car_stock, car_rate) 
+  			  VALUES('$carName', '$carPhotoURL', '$carInfo', '$carStock', '$carRate')";
+  	mysqli_query($db, $query);
+  	$_SESSION['success'] = "Car has been added";
+  	header('location: adminView.php');
+  }
+}
 
 // LOGIN USER
 if (isset($_POST['login_user'])) {
@@ -104,7 +147,7 @@ if (isset($_POST['login_user'])) {
         if (mysqli_num_rows($results) == 1) {
           $_SESSION['email'] = $email;
           $_SESSION['success'] = "You are now logged in";
-          header('location: carWarehouse.php');
+          header('location: adminView.php');
         }else {
             array_push($errors, "Wrong email/password combination");
         }
