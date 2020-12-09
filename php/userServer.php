@@ -13,7 +13,12 @@ $carPhotoURL = "";
 $carInfo = "";
 $carStock = "";
 $carRate = "";
-
+$cardName = "";
+$cardCvv = "";
+$cardExpiry = "";
+$cardNumber = "";
+$user_id = "";
+$return_date = "";
 
 $errors = array(); 
 
@@ -100,6 +105,60 @@ if (isset($_POST['car_add'])) {
   	$_SESSION['success'] = "Car has been added";
   	header('location: adminView.php');
   }
+}
+
+if (isset($_POST['book_now'])) {
+	$car_id = $_SESSION['car_id'];
+	$query = "SELECT * FROM cars WHERE car_id = '$car_id'";
+	$results = mysql_query($db, $query);
+	if (mysqli_num_rows($results) == 1) {
+		$carDetails = mysqli_fetch_assoc($results);
+		$_SESSION['car_name'] = $carDetails['car_name'];
+		$_SESSION['car_pic'] = $carDetails['car_pic'];
+		$_SESSION['car_info'] = $carDetails['car_info'];
+		$_SESSION['car_stock'] = $carDetails['car_stock'];
+		$_SESSION['car_rate'] = $carDetails['car_rate'];
+	}
+	header('location: rent.php');
+}
+
+if (isset($_POST['confirm_rent'])) {
+	$return_date = mysqli_real_escape_string($db, $_SESSION['return_date']);
+	$current_date = date("Y/m/d");
+	$_SESSION['number_of_days'] = date_diff($current_date, $return_date);
+	$_SESSION['total_amount'] = $_SESSION['number_of_days'] * $_SESSION['car_rate'];
+	header('location: confirmation.php');
+}
+
+if (isset($_POST['confirm'])) {
+	  $cardName = mysqli_real_escape_string($db, $_SESSION['card_name']);
+	  $cardCvv = mysqli_real_escape_string($db, $_SESSION['card_cvv']);
+	  $cardExpiry = mysqli_real_escape_string($db, $_SESSION['card_expiry']);
+	  $cardNumber = mysqli_real_escape_string($db, $_SESSION['card_number']);
+	  $totalAmount = mysqli_real_escape_string($db, $_SESSION['total_amount']);
+	  if (empty($cardName)) { array_push($errors, "Card Name is required"); }
+	  if (empty($cardNumber)) { array_push($errors, "Card Number is required"); }
+	  if (empty($cardCvv)) { array_push($errors, "Card CVV is required"); }
+	  if (empty($cardExpiry)) { array_push($errors, "Card Expiry is required"); }
+	  
+	  $user_check_query = "SELECT * FROM users WHERE email='$email' LIMIT 1";
+	  $result = mysqli_query($db, $user_check_query);
+	  $user = mysqli_fetch_assoc($result);
+	  
+	  if ($user) { // if user exists
+		$user_id = $user['id'];
+	  } else {
+		  array_push($errors, "User ID does not exist");
+	  }
+	  if (count($errors) == 0) {
+		  $car_id = $_SESSION['car_id'];
+		  $return_date = $_SESSION['return_date'];
+		$query = "INSERT INTO transaction (user_id, car_id, return_date value) 
+				  VALUES('$user_id', '$car_id', '$return_date', '$totalAmount')";
+		mysqli_query($db, $query);
+		
+		header('location: bookingConfirmed.php');
+	  }
 }
 
 // LOGIN USER
