@@ -12,13 +12,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Car Details</title>
+	<title>Confirmation</title>
 	<link rel="stylesheet" type="text/css" href="../css/styles.css">
 </head>
 <body>
 
 <div class="header">
-	<h2>Car Details</h2>
+	<h2>Confirmation</h2>
 </div>
 <div class="content">
   	<!-- notification message -->
@@ -39,22 +39,30 @@
 		<form method="post" action="confirmation.php">
 			<?php include('errors.php'); ?>
 			<div class="input-group">
-				<p><strong><?php echo $_SESSION['car_name']; ?></strong></p>
+				<label>Total</label>
+				<p><?php $_SESSION['number_of_days']; ?> * <?php $_SESSION['car_rate']; ?> = <?php $_SESSION['total_amount']; ?></p>
+			</div>
+			<div class="header">
+				<label>Enter Card Details</label>
 			</div>
 			<div class="input-group">
-				<img src = "<?php $_SESSION['car_pic']; ?>" style="height: 160px;"/>
-				<p><?php echo $_SESSION['car_info']; ?></p>
+				<label>Card Number</label>
+				<input type="text" name="card_number" value="<?php echo $card_number; ?>">
 			</div>
 			<div class="input-group">
-				<p><strong><?php echo $_SESSION['car_stock']; ?></strong></p>
-				<p><?php echo $_SESSION['car_rate']; ?></p>
+				<label>Card Expiry</label>
+				<input type="text" placeholder="MM/yy" name="card_expiry" value="<?php echo $card_expiry; ?>">
 			</div>
 			<div class="input-group">
-				<label>Select Return Date</label>
-				<input type="date" id="return_date"  value="<?php echo $return_date; ?>">
+				<label>CVV</label>
+				<input type="text" name="card_cvv"value="<?php echo $card_cvv; ?>">
 			</div>
 			<div class="input-group">
-				<button type="submit" class="btn" name="confirm_rent">Confirm</button>
+				<label>Name on the Card</label>
+				<input type="text" name="card_name" value="<?php echo $card_name; ?>">
+			</div>
+			<div class="input-group">
+				<button type="submit" class="btn" name="confirm">Confirm Payment</button>
 			</div>
 	  </form>
     	<p> <a href="index.php?logout='1'" style="color: red;">logout</a> </p>
