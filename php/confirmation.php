@@ -1,13 +1,13 @@
-<?php 
-  if (!isset($_SESSION['email'])) {
-  	$_SESSION['msg'] = "You must log in first";
-  	header('location: login.php');
-  }
-  if (isset($_GET['logout'])) {
-  	session_destroy();
-  	unset($_SESSION['email']);
-  	header("location: login.php");
-  }
+<?php include('userServer.php');
+	if (!isset($_SESSION['email'])) {
+		$_SESSION['msg'] = "You must log in first";
+		header('location: login.php');
+	  }
+	  if (isset($_GET['logout'])) {
+		session_destroy();
+		unset($_SESSION['email']);
+		header("location: login.php");
+	 }
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,10 +17,10 @@
 </head>
 <body>
 
-<div class="header">
+<div class="header" style="width:70%;">
 	<h2>Confirmation</h2>
 </div>
-<div class="content">
+<div class="content" style="width:70%;">
   	<!-- notification message -->
   	<?php if (isset($_SESSION['success'])) : ?>
       <div class="error success" >
@@ -35,31 +35,30 @@
 
     <!-- logged in user information -->
     <?php  if (isset($_SESSION['email'])) : ?>
-    	<p>Welcome <strong><?php echo $_SESSION['email']; ?></strong></p>
-		<form method="post" action="confirmation.php">
+		<form method="post" action="confirmation.php" style="width:70%;">
 			<?php include('errors.php'); ?>
 			<div class="input-group">
 				<label>Total</label>
-				<p><?php $_SESSION['number_of_days']; ?> * <?php $_SESSION['car_rate']; ?> = <?php $_SESSION['total_amount']; ?></p>
+				<p><?php echo $_SESSION['number_of_days']; ?> days * <?php echo $_SESSION['car_rate']; ?>$/day = <?php echo $_SESSION['total_amount']; ?>$</p>
 			</div>
-			<div class="header">
+			<div class="header" style="width:90%;">
 				<label>Enter Card Details</label>
 			</div>
 			<div class="input-group">
 				<label>Card Number</label>
-				<input type="text" name="card_number" value="<?php echo $card_number; ?>">
+				<input type="text" name="cardNumber" placeholder="xxxx xxxx xxxx xxxx" value="<?php echo $cardNumber; ?>">
 			</div>
 			<div class="input-group">
 				<label>Card Expiry</label>
-				<input type="text" placeholder="MM/yy" name="card_expiry" value="<?php echo $card_expiry; ?>">
+				<input type="text" placeholder="MM/yy" name="cardExpiry" value="<?php echo $cardExpiry; ?>">
 			</div>
 			<div class="input-group">
 				<label>CVV</label>
-				<input type="text" name="card_cvv"value="<?php echo $card_cvv; ?>">
+				<input type="text" name="cardCvv" placeholder="xxx" value="<?php echo $cardCvv; ?>">
 			</div>
 			<div class="input-group">
 				<label>Name on the Card</label>
-				<input type="text" name="card_name" value="<?php echo $card_name; ?>">
+				<input type="text" name="cardName" value="<?php echo $cardName; ?>">
 			</div>
 			<div class="input-group">
 				<button type="submit" class="btn" name="confirm">Confirm Payment</button>

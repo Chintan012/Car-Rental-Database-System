@@ -1,5 +1,15 @@
-
-<?php include('userServer.php');
+<?php 
+	include('userServer.php');
+	if (!isset($_SESSION['email'])) {
+		$_SESSION['msg'] = "You must log in first";
+		header('location: login.php');
+	  }
+	  if (isset($_GET['logout'])) {
+		session_destroy();
+		unset($_SESSION['email']);
+		header("location: login.php");
+	 }
+	
 	$basepath = implode('/', array_slice(explode('/', $_SERVER['SCRIPT_NAME']), 0, -1)) . '/';
     $uri = substr($_SERVER['REQUEST_URI'], strlen($basepath));
     if (strstr($uri, '?')) $uri = substr($uri, 0, strpos($uri, '?'));
@@ -25,7 +35,8 @@
 	<h2>Car Details</h2>
 </div>
 <div class="details">
-  	<!-- notification message -->
+  	 <!-- logged in user information -->
+    <?php  if (isset($_SESSION['email'])) : ?>
   	
 
 		<form method="post" action="confirmation.php" style="width:70%;">
@@ -34,7 +45,7 @@
 				<p><strong><?php echo $_SESSION['car_name']; ?></strong></p>
 			</div>
 			<div class="input-group">
-				<img src = "<?php echo $_SESSION['car_pic']; ?>" style="height: 160px;"/>
+				<img src = "../../images/<?php echo $_SESSION['car_pic']; ?>" style="height: 160px;"/>
 				<p><?php echo $_SESSION['car_info']; ?></p>
 			</div>
 			<div class="input-group">
@@ -43,14 +54,14 @@
 			</div>
 			<div class="input-group">
 				<label>Select Return Date</label>
-				<input type="date" id="return_date"  value="<?php echo $return_date; ?>">
+				<input type="date" name="return_date"  value="<?php echo $return_date; ?>">
 			</div>
 			<div class="input-group">
 				<button type="submit" class="btn" name="confirm_rent">Confirm</button>
 			</div>
 	  </form>
-    	<p> <a href="index.php?logout='1'" style="color: red;">logout</a> </p>
-   
+    	<p> <a href="../index.php?logout='1'" style="color: red;">logout</a> </p>
+    <?php endif ?>
 </div>
 		
 </body>
