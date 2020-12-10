@@ -43,16 +43,17 @@
 		<form method="post" action="confirmation.php" style="width:70%;">
 			<?php include('errors.php'); ?>
 			<div class="input-group">
-				<p><strong><?php echo $_SESSION['car_name']; ?></strong></p>
+				<p><strong>Car Name: </strong> <?php echo $_SESSION['car_name']; ?></p>
 			</div>
 			<div class="input-group">
-				<img src = "../../images/<?php echo $_SESSION['car_pic']; ?>" style="height: 160px;"/>
-				<p><?php echo $_SESSION['car_info']; ?></p>
+				<img src = "<?php echo $_SESSION['car_pic']; ?>" style="height: 160px;"/>
+				<p><strong>Car Description: </strong><?php echo $_SESSION['car_info']; ?></p>
 			</div>
 			<div class="input-group">
-				<p><strong><?php echo $_SESSION['car_stock']; ?></strong></p>
-				<p><?php echo $_SESSION['car_rate']; ?></p>
+				<p><strong>Car Stock: </strong> <?php echo $_SESSION['car_stock']; ?></p>
+				<p><strong>Car Rate: </strong><?php echo $_SESSION['car_rate']; ?></p>
 			</div>
+			
 			<div class="input-group">
 				<label>Select Return Date</label>
 				<input type="date" name="return_date"  value="<?php echo $return_date; ?>">

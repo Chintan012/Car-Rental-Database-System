@@ -51,19 +51,26 @@
 					<div>
 						<div>
 							<h4><?=  $car[1] ?></h4>
-							<img src="../images/<?= $car[2] ?>" class="img-responsive" style="height: 160px;"/>
+							<img src="<?= $car[2] ?>" class="img-responsive" style="height: 160px;"/>
 							
 							<?php
+							$carInfo = $car[3];
 							$stock = $car[4];
+							$rate = $car[5];
 							?>
 
-							<?= "<h5 >Stock : $stock </h5>"; ?>
+							<?= "<p><strong>Car Description : </strong> $carInfo </p>"; ?>
+
+							<?= "<p><strong>Stock :</strong> $stock </p>"; ?>
+						
+							<?= "<p>Rate : </strong> $rate </p>"; ?>
 							</br>
 							<?php if ($stock == 0) $disable = "disabled"; else $disable = ""; ?>
 
 							<a href="./rent.php/<?= $car[0] ?>" class="btn btn-<?= $disable?>" style="margin-left: 10px;">Rent</a>
 							</br>
 							</br>
+							<hr>
 						</div>
 					</div>
 				</div>
