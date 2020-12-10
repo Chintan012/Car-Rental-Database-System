@@ -1,5 +1,5 @@
 <?php 
-  include('userServer.php') 
+  include('userServer.php'); 
   if (!isset($_SESSION['email'])) {
   	$_SESSION['msg'] = "You must log in first";
   	header('location: login.php');
