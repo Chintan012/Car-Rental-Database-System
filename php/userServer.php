@@ -25,7 +25,7 @@ $return_date = "";
 $errors = array(); 
 
 // connect to the database
-$db = mysqli_connect('localhost', 'root', 'LAsNqhYEO3XH30wW', 'carrentals');
+$db = mysqli_connect('localhost', 'root', '', 'carrental');
 
 // REGISTER USER
 if (isset($_POST['reg_user'])) {
