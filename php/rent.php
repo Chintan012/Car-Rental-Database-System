@@ -1,3 +1,4 @@
+
 <?php include('userServer.php');
 	$basepath = implode('/', array_slice(explode('/', $_SERVER['SCRIPT_NAME']), 0, -1)) . '/';
     $uri = substr($_SERVER['REQUEST_URI'], strlen($basepath));
@@ -12,7 +13,6 @@
 	$car_id = $routes[2];
 	echo carDetails($car_id);
  ?>
-
 <!DOCTYPE html>
 <html>
 <head>

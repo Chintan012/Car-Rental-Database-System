@@ -107,21 +107,24 @@ if (isset($_POST['car_add'])) {
   }
 }
 
+
 //Rent details
 function carDetails($int) {
 	$car_id = $int;
-	$query = "SELECT * FROM cars WHERE car_id = '$car_id'";
-	global $db;
-	$results = mysqli_query($db, $query);
-	if (mysqli_num_rows($results) == 1) {
-		$carDetails = mysqli_fetch_assoc($results);
-		$_SESSION['car_name'] = $carDetails['car_name'];
-		$_SESSION['car_pic'] = $carDetails['car_pic'];
-		$_SESSION['car_info'] = $carDetails['car_info'];
-		$_SESSION['car_stock'] = $carDetails['car_stock'];
-		$_SESSION['car_rate'] = $carDetails['car_rate'];
-	}
+
+if (isset($_POST['remove_car'])) {
+  $carName = mysqli_real_escape_string($db, $_POST['carName']);
+  
+  if (empty($carName)) { array_push($errors, "Car Name is required"); }
+  
+	$query = "DELETE from cars where car_name = '$carName'";
+
+  mysqli_query($db, $query);
+  $_SESSION['success'] = "Car has been removed";
+  header('location: adminView.php');
+
 }
+
 
 //Confirmation Page
 if (isset($_POST['confirm_rent'])) {
