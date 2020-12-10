@@ -107,6 +107,20 @@ if (isset($_POST['car_add'])) {
   }
 }
 
+
+if (isset($_POST['remove_car'])) {
+  $carName = mysqli_real_escape_string($db, $_POST['carName']);
+  
+  if (empty($carName)) { array_push($errors, "Car Name is required"); }
+  
+	$query = "DELETE from cars where car_name = '$carName'";
+
+  mysqli_query($db, $query);
+  $_SESSION['success'] = "Car has been removed";
+  header('location: adminView.php');
+
+}
+
 if (isset($_POST['book_now'])) {
 	$car_id = $_SESSION['car_id'];
 	$query = "SELECT * FROM cars WHERE car_id = '$car_id'";
