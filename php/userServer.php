@@ -23,7 +23,7 @@ $return_date = "";
 $errors = array(); 
 
 // connect to the database
-$db = mysqli_connect('localhost', 'root', '', 'carrental');
+$db = mysqli_connect('localhost', 'root', 'LAsNqhYEO3XH30wW', 'carrentals');
 
 // REGISTER USER
 if (isset($_POST['reg_user'])) {
@@ -107,10 +107,12 @@ if (isset($_POST['car_add'])) {
   }
 }
 
-if (isset($_POST['book_now'])) {
-	$car_id = $_SESSION['car_id'];
+//Rent details
+function carDetails($int) {
+	$car_id = $int;
 	$query = "SELECT * FROM cars WHERE car_id = '$car_id'";
-	$results = mysql_query($db, $query);
+	global $db;
+	$results = mysqli_query($db, $query);
 	if (mysqli_num_rows($results) == 1) {
 		$carDetails = mysqli_fetch_assoc($results);
 		$_SESSION['car_name'] = $carDetails['car_name'];
@@ -119,9 +121,9 @@ if (isset($_POST['book_now'])) {
 		$_SESSION['car_stock'] = $carDetails['car_stock'];
 		$_SESSION['car_rate'] = $carDetails['car_rate'];
 	}
-	header('location: rent.php');
 }
 
+//Confirmation Page
 if (isset($_POST['confirm_rent'])) {
 	$return_date = mysqli_real_escape_string($db, $_SESSION['return_date']);
 	$current_date = date("Y/m/d");
@@ -180,6 +182,13 @@ if (isset($_POST['login_user'])) {
         if (mysqli_num_rows($results) == 1) {
           $_SESSION['email'] = $email;
           $_SESSION['success'] = "You are now logged in";
+		  $query = "SELECT * FROM cars";
+		  $results = mysqli_query($db, $query);
+		  $rows = array();
+		  while($row = $results->fetch_row()) {
+			 array_push($rows,$row);
+		  }
+		  $_SESSION['cars'] = $rows;
           header('location: index.php');
         }else {
             array_push($errors, "Wrong email/password combination");

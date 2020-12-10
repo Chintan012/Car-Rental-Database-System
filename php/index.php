@@ -19,10 +19,10 @@
 </head>
 <body>
 
-<div class="header">
+<div class="header" style="width:70%;">
 	<h2>Home Page</h2>
 </div>
-<div class="content">
+<div class="content" style="width:70%;">
   	<!-- notification message -->
   	<?php if (isset($_SESSION['success'])) : ?>
       <div class="error success" >
@@ -38,6 +38,33 @@
     <!-- logged in user information -->
     <?php  if (isset($_SESSION['email'])) : ?>
     	<p>Welcome <strong><?php echo $_SESSION['email']; ?></strong></p>
+		<p><strong>Please select the cars from below-</strong></p>
+		</br>
+		<div class="row">
+			<?php $cars = $_SESSION['cars']; ?>
+			<?php foreach ($cars as $car) { ?>
+				<div>
+					<div>
+						<div>
+							<h4><?=  $car[1] ?></h4>
+							<img src="<?= substr($car[2],3) ?>" class="img-responsive" style="height: 160px;"/>
+							
+							<?php
+							$stock = $car[4];
+							?>
+
+							<?= "<h5 >Stock : $stock </h5>"; ?>
+							</br>
+							<?php if ($stock == 0) $disable = "disabled"; else $disable = ""; ?>
+
+							<a href="./rent.php/<?= $car[0] ?>" class="btn btn-<?=$color . " " . $disable?>" style="margin-left: 10px;">Rent</a>
+							</br>
+							</br>
+						</div>
+					</div>
+				</div>
+			<?php } ?>
+		</div>
     	<p> <a href="index.php?logout='1'" style="color: red;">logout</a> </p>
     <?php endif ?>
 </div>
