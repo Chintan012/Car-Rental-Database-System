@@ -74,3 +74,11 @@
     background: white;
     border-radius: 0px 0px 10px 10px;
   }
+  .btn-disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+
+        /*Button disabled - CSS color class*/
+        color: #c0c0c0;
+        background-color: #ffffff;
+    }
