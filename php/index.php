@@ -1,9 +1,13 @@
 <?php 
-  session_start(); 
-
+	if(session_status() == PHP_SESSION_NONE) {
+		session_start(); 
+	}
   if (!isset($_SESSION['email'])) {
   	$_SESSION['msg'] = "You must log in first";
   	header('location: login.php');
+  } else {
+	  include('userServer.php');
+	  refreshStock();
   }
   if (isset($_GET['logout'])) {
   	session_destroy();
@@ -47,7 +51,7 @@
 					<div>
 						<div>
 							<h4><?=  $car[1] ?></h4>
-							<img src="<?= substr($car[2],3) ?>" class="img-responsive" style="height: 160px;"/>
+							<img src="../images/<?= $car[2] ?>" class="img-responsive" style="height: 160px;"/>
 							
 							<?php
 							$stock = $car[4];

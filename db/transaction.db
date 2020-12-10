@@ -14,12 +14,12 @@ CREATE TRIGGER STOCK_UPDATE_DECREASE
 AFTER INSERT
   ON transaction FOR EACH ROW
   BEGIN
-    UPDATE cars SET stock = stock - 1 WHERE _id = NEW.car_id;
+    UPDATE cars SET car_stock = car_stock - 1 WHERE car_id = NEW.car_id;
   END;
 
 CREATE TRIGGER STOCK_UPDATE_INCREASE
 AFTER DELETE
   ON transaction FOR EACH ROW
   BEGIN
-    UPDATE cars SET stock = stock + 1 WHERE _id = OLD.car_id;
+    UPDATE cars SET car_stock = car_stock + 1 WHERE car_id = OLD.car_id;
   END;

@@ -39,7 +39,7 @@
     <?php  if (isset($_SESSION['email'])) : ?>
     	<p>Congrats <strong><?php echo $_SESSION['email']; ?></strong></p>
 		<p>Booking Confirmed</p>
-		<p> <a href="index.php?logout='1'" style="color: red;">Home</a> </p>
+		<p> <a href="index.php" style="color: red;">Home</a> </p>
     	<p> <a href="index.php?logout='1'" style="color: red;">logout</a> </p>
     <?php endif ?>
 </div>

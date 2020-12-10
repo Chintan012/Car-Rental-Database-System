@@ -1,5 +1,7 @@
 <?php
-session_start();
+if(session_status() == PHP_SESSION_NONE) {
+		session_start(); 
+}
 
 // initializing variables
 $firstName = "";
@@ -120,28 +122,34 @@ function carDetails($int) {
 		$_SESSION['car_info'] = $carDetails['car_info'];
 		$_SESSION['car_stock'] = $carDetails['car_stock'];
 		$_SESSION['car_rate'] = $carDetails['car_rate'];
+		$_SESSION['car_id'] = $car_id;
 	}
 }
 
 //Confirmation Page
 if (isset($_POST['confirm_rent'])) {
-	$return_date = mysqli_real_escape_string($db, $_SESSION['return_date']);
-	$current_date = date("Y/m/d");
-	$_SESSION['number_of_days'] = date_diff($current_date, $return_date);
+	$return_date = mysqli_real_escape_string($db, $_POST['return_date']);
+	$current_date = date_create(date("Y/m/d"));
+	$returnDate = date_create($return_date);
+	$diff = date_diff($current_date, $returnDate);
+	$_SESSION['number_of_days'] = intval($diff->format("%d")) + 1;
 	$_SESSION['total_amount'] = $_SESSION['number_of_days'] * $_SESSION['car_rate'];
-	header('location: confirmation.php');
+	$_SESSION['return_date'] = date("Y/m/d",strtotime($return_date));
+	header('location: ../confirmation.php');
 }
 
 if (isset($_POST['confirm'])) {
-	  $cardName = mysqli_real_escape_string($db, $_SESSION['card_name']);
-	  $cardCvv = mysqli_real_escape_string($db, $_SESSION['card_cvv']);
-	  $cardExpiry = mysqli_real_escape_string($db, $_SESSION['card_expiry']);
-	  $cardNumber = mysqli_real_escape_string($db, $_SESSION['card_number']);
+	  $cardName = mysqli_real_escape_string($db, $_POST['cardName']);
+	  $cardCvv = mysqli_real_escape_string($db, $_POST['cardCvv']);
+	  $cardExpiry = mysqli_real_escape_string($db, $_POST['cardExpiry']);
+	  $cardNumber = mysqli_real_escape_string($db, $_POST['cardNumber']);
 	  $totalAmount = mysqli_real_escape_string($db, $_SESSION['total_amount']);
 	  if (empty($cardName)) { array_push($errors, "Card Name is required"); }
-	  if (empty($cardNumber)) { array_push($errors, "Card Number is required"); }
-	  if (empty($cardCvv)) { array_push($errors, "Card CVV is required"); }
-	  if (empty($cardExpiry)) { array_push($errors, "Card Expiry is required"); }
+	  if (empty($cardNumber)) { array_push($errors, "Card Number is required"); } else if (strlen($cardNumber) != 19) { array_push($errors, "Invalid card number"); }
+	  if (empty($cardCvv)) { array_push($errors, "Card CVV is required"); } else if (strlen($cardCvv) != 3) { array_push($errors, "Invalid card cvv"); }
+	  if (empty($cardExpiry)) { array_push($errors, "Card Expiry is required"); } else if ((substr($cardExpiry, 0, 2) > 12) || (substr($cardExpiry, 3) < 20)) { array_push($errors, "Invalid expiry"); }
+	  
+	  $email = $_SESSION['email'];
 	  
 	  $user_check_query = "SELECT * FROM users WHERE email='$email' LIMIT 1";
 	  $result = mysqli_query($db, $user_check_query);
@@ -155,12 +163,23 @@ if (isset($_POST['confirm'])) {
 	  if (count($errors) == 0) {
 		  $car_id = $_SESSION['car_id'];
 		  $return_date = $_SESSION['return_date'];
-		$query = "INSERT INTO transaction (user_id, car_id, return_date value) 
+		$query = "INSERT INTO transaction (user_id, car_id, return_date, value) 
 				  VALUES('$user_id', '$car_id', '$return_date', '$totalAmount')";
 		mysqli_query($db, $query);
 		
 		header('location: bookingConfirmed.php');
 	  }
+}
+
+function refreshStock() {
+	global $db;
+	$query = "SELECT * FROM cars";
+	$results = mysqli_query($db, $query);
+	$rows = array();
+	while($row = $results->fetch_row()) {
+		array_push($rows,$row);
+	}
+	$_SESSION['cars'] = $rows;
 }
 
 // LOGIN USER
