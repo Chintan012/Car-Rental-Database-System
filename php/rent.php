@@ -23,7 +23,6 @@
 	$car_id = $routes[2];
 	echo carDetails($car_id);
  ?>
-
 <!DOCTYPE html>
 <html>
 <head>

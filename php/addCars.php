@@ -33,7 +33,7 @@
   	  <input type="text" name="carRate" value="<?php echo $carRate; ?>" >
   	</div>
   	<div class="input-group">
-  	  <button type="submit" class="btn" name="add_car">Add Car</button>
+  	  <button type="submit" class="btn" name="car_add">Add Car</button>
   	</div>
   </form>
 </body>
